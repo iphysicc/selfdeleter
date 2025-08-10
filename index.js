@@ -344,11 +344,21 @@ class MessageCleaner {
       try {
         console.log(`\n🏰 Sunucu: ${guild.name}`);
 
-        const channels = guild.channels.cache.filter(
-          (channel) =>
-            channel.isTextBased() &&
+        const channels = guild.channels.cache.filter((channel) => {
+          // Metin kanalı kontrolü (discord.js-selfbot-v13 uyumlu)
+          const isTextChannel =
+            channel.type === 0 || // GUILD_TEXT
+            channel.type === "GUILD_TEXT" ||
+            channel.type === 5 || // GUILD_NEWS
+            channel.type === "GUILD_NEWS" ||
+            channel.type === 11 || // GUILD_NEWS_THREAD
+            channel.type === 12; // GUILD_PUBLIC_THREAD
+
+          return (
+            isTextChannel &&
             channel.permissionsFor(this.client.user)?.has("ViewChannel")
-        );
+          );
+        });
 
         console.log(`📝 ${channels.size} metin kanalı bulundu`);
 
@@ -488,11 +498,21 @@ class MessageCleaner {
         await this.sleep(5000);
       }
 
-      const channels = guild.channels.cache.filter(
-        (channel) =>
-          channel.isTextBased() &&
+      const channels = guild.channels.cache.filter((channel) => {
+        // Metin kanalı kontrolü (discord.js-selfbot-v13 uyumlu)
+        const isTextChannel =
+          channel.type === 0 || // GUILD_TEXT
+          channel.type === "GUILD_TEXT" ||
+          channel.type === 5 || // GUILD_NEWS
+          channel.type === "GUILD_NEWS" ||
+          channel.type === 11 || // GUILD_NEWS_THREAD
+          channel.type === 12; // GUILD_PUBLIC_THREAD
+
+        return (
+          isTextChannel &&
           channel.permissionsFor(this.client.user)?.has("ViewChannel")
-      );
+        );
+      });
 
       console.log(`📝 ${channels.size} metin kanalı bulundu`);
 
@@ -517,9 +537,7 @@ class MessageCleaner {
           // Kanallar arası bekleme
           await this.sleep(2000);
         } catch (error) {
-          console.error(
-            `❌ Kanal hatası (${channel.name}): ${error.message}`
-          );
+          console.error(`❌ Kanal hatası (${channel.name}): ${error.message}`);
         }
       }
 
@@ -659,10 +677,14 @@ async function main() {
 
     case "clean-server":
       const serverId = args[1];
-      const serverKeywords = args.slice(2).filter(arg => !arg.startsWith('--'));
+      const serverKeywords = args
+        .slice(2)
+        .filter((arg) => !arg.startsWith("--"));
       if (!serverId || serverKeywords.length === 0) {
         console.error("❌ Sunucu ID ve en az bir kelime gerekli!");
-        console.error("Örnek: node index.js clean-server 123456789 kelime1 kelime2");
+        console.error(
+          "Örnek: node index.js clean-server 123456789 kelime1 kelime2"
+        );
         process.exit(1);
       }
       await cleaner.cleanKeywordsInServer(serverId, serverKeywords, {
@@ -672,15 +694,23 @@ async function main() {
 
     case "clean-server-fast":
       const fastServerId = args[1];
-      const fastServerKeywords = args.slice(2).filter(arg => !arg.startsWith('--'));
+      const fastServerKeywords = args
+        .slice(2)
+        .filter((arg) => !arg.startsWith("--"));
       if (!fastServerId || fastServerKeywords.length === 0) {
         console.error("❌ Sunucu ID ve en az bir kelime gerekli!");
-        console.error("Örnek: node index.js clean-server-fast 123456789 kelime1 kelime2");
+        console.error(
+          "Örnek: node index.js clean-server-fast 123456789 kelime1 kelime2"
+        );
         process.exit(1);
       }
-      await cleaner.cleanKeywordsInServerFast(fastServerId, fastServerKeywords, {
-        dryRun: args.includes("--dry-run"),
-      });
+      await cleaner.cleanKeywordsInServerFast(
+        fastServerId,
+        fastServerKeywords,
+        {
+          dryRun: args.includes("--dry-run"),
+        }
+      );
       break;
 
     case "clean-all-servers":
