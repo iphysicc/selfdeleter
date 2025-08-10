@@ -37,17 +37,20 @@ cp .env.example .env
 
 ### Kanal Mesajlarını Temizleme
 ```bash
-# Belirtilen kanaldan 100 mesaj sil
+# HIZLI YÖNTEM - Discord arama API'si (ÖNERİLEN)
+node index.js clean-channel-fast 123456789012345678 100
+
+# Geleneksel yöntem - Tüm mesajları çekip filtrele (YAVAS)
 node index.js clean-channel 123456789012345678 100
 
 # TÜM mesajları sil (limit belirtilmezse)
-node index.js clean-channel 123456789012345678
+node index.js clean-channel-fast 123456789012345678
 
 # Açıkça tüm mesajları sil
 node index.js clean-all-channel 123456789012345678
 
 # Dry run (sadece sayım, silme yok)
-node index.js clean-channel 123456789012345678 50 --dry-run
+node index.js clean-channel-fast 123456789012345678 50 --dry-run
 ```
 
 ### DM Mesajlarını Temizleme
@@ -68,6 +71,7 @@ node index.js clean-dm 987654321098765432 100 --dry-run
 ## ⚙️ Özellikler
 
 - ✅ Kanal ve DM mesaj temizleme
+- ✅ **HIZLI ARAMA** - Discord arama API'si kullanımı
 - ✅ **Limitsiz temizleme** - Tüm mesajları sil
 - ✅ Rate limiting (ban koruması)
 - ✅ Dry run modu
@@ -76,6 +80,7 @@ node index.js clean-dm 987654321098765432 100 --dry-run
 - ✅ İlerleme göstergesi
 - ✅ Hata yönetimi
 - ✅ 5 saniye güvenlik bekleme süresi (tüm mesaj silme için)
+- ✅ Otomatik fallback (arama API'si çalışmazsa geleneksel yöntem)
 
 ## 🛡️ Güvenlik
 
