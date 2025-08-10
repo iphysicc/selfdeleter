@@ -723,13 +723,16 @@ async function main() {
   node index.js clean-all-dm 987654321098765432 --dry-run
   
 🔍 Kelime bazlı silme:
-  node index.js clean-keywords-fast 123456789 "spam" "reklam"        # HIZLI ARAMA
-  node index.js clean-keywords 123456789 "kötü kelime" spam          # YAVAS
+  node index.js clean-keywords-fast 123456789 "spam" "reklam"        # TEK KANAL HIZLI
+  node index.js clean-keywords 123456789 "kötü kelime" spam          # TEK KANAL YAVAS
   node index.js clean-keywords-dm 987654321 "silinecek" test --dry-run
+  node index.js clean-server-fast 987654321098765432 "spam" "reklam" # TEK SUNUCU HIZLI
+  node index.js clean-server 987654321098765432 "spam" "reklam"      # TEK SUNUCU
   node index.js clean-all-servers "spam" "reklam" "kötü" --dry-run   # TÜM SUNUCULAR
 
 ⚠️  Limit belirtilmezse TÜM MESAJLAR silinir!
 🚀 HIZLI: clean-channel-fast komutu Discord arama API'sini kullanır (çok daha hızlı)
+🏰 SUNUCU: clean-server-fast tek sunucudaki tüm kanallarda hızlı arama yapar
 ⚠️  clean-all-servers TÜM SUNUCULARDA çalışır - çok dikkatli kullanın!
             `);
   }
